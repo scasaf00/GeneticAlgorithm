@@ -7,5 +7,6 @@ public enum Colors {
     GREEN,  // -> 4/7
     PURPLE, // -> 5/7
     BLACK,  // -> 6/7
-    WHITE   // -> 7/7
+    WHITE,  // -> 7/7
+    EMPTY   // only for the reply initialization
 }

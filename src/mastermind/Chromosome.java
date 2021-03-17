@@ -46,6 +46,10 @@ public class Chromosome {
         this.genes = genes;
     }
 
+    public void setValue() {
+       this.value = this.response.getNumericalValue();
+    }
+
     public int getValue() {
         return value;
     }

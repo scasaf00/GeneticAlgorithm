@@ -35,6 +35,7 @@ public class Gene {
             case PURPLE: out.append("|").append(purple).append("0").append(reset).append("|"); break;
             case BLACK: out.append("|").append(black).append("0").append(reset).append("|"); break;
             case WHITE: out.append("|").append(white).append("0").append(reset).append("|"); break;
+            case EMPTY: out.append("|").append(" ").append("|"); break;
         }
         return out.toString();
     }

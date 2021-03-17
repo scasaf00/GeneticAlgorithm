@@ -1,12 +1,10 @@
 package mastermind;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class Population {
 
-    private List<Chromosome> chromosomes = new ArrayList<Chromosome>();
+    private List<Chromosome> chromosomes = new ArrayList<>();
     private Chromosome bestChromosome;
 
     public Population(){
@@ -38,22 +36,48 @@ public class Population {
                     black++;
             }
             c.setResponse(white, black);
+            c.setValue();
+            if(this.getBestChromosome() == null || c.getValue() > this.getBestChromosome().getValue())
+                this.setBestChromosome(c);
             white = 0;
             black = 0;
         }
         if(Main.SHOW_EVALUATE){
             System.out.println("\nEvaluation with color code:");
+            System.out.println(" Chromosome\t\t   Reply\t\t Value");
             System.out.println(this.toString());
         }
     }
 
     public boolean stopCondition(){
-        //TODO
-        return true;
+        for(int i = 0; i < Main.NUM_CHROMOSOMES; i++){
+            if(chromosomes.get(i).getValue() == 14) return true;
+        }
+        return false;
     }
 
     public void selection(){
-        //TODO
+        List<Chromosome> newChromosomes = new ArrayList<>();
+        int totalFitness = 0;
+        for (Chromosome chromosome : this.chromosomes) {
+            totalFitness += chromosome.getValue();
+        }
+        for(int i = 0; i < Main.NUM_CHROMOSOMES; i++) {
+            int rnd = (int) (Math.random() * totalFitness);
+            int partialSum = 0;
+            for (int j = Main.NUM_CHROMOSOMES - 1; j >= 0; j--) {
+                partialSum += this.chromosomes.get(j).getValue();
+                if (partialSum >= rnd) {
+                    newChromosomes.add(new Chromosome(this.chromosomes.get(j).getGenes()));
+                    break;
+                }
+            }
+        }
+        this.chromosomes = newChromosomes;
+        if(Main.SHOW_SELECTED) {
+            System.out.println(" Seleccion");
+            System.out.println(this.toString());
+        }
     }
 
     public void crossover(){
@@ -75,10 +99,11 @@ public class Population {
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder();
-        Iterator<Chromosome> it = chromosomes.iterator();
-        while (it.hasNext()){
-            out.append(it.next().toString()).append("\n");
+        for (Chromosome chromosome : chromosomes) {
+            out.append(chromosome.toString()).append("\n");
         }
+        out.append("\n\t\tBest Chromosome:\n");
+        out.append(bestChromosome.toString()).append("\n");
         return out.toString();
     }
 }
