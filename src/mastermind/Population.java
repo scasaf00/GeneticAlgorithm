@@ -81,7 +81,15 @@ public class Population {
     }
 
     public void crossover(){
-        //TODO
+        for(int i = 0; i < Main.NUM_CHROMOSOMES; i += 2){
+            if((i+1) == Main.NUM_CHROMOSOMES) break;
+            for(int j = 2; j < 4; j++){
+                Colors color = this.chromosomes.get(i+1).getGenes().get(j).getColor();
+                this.chromosomes.get(i+1).setGenes(j, color);
+            }
+        }
+        System.out.println("Crossover:");
+        System.out.println(this.toString());
     }
 
     public void mutate(){

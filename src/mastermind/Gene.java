@@ -2,7 +2,7 @@ package mastermind;
 
 public class Gene {
 
-    private final Colors color;
+    private Colors color;
 
     /*
      *  Colors for terminal
@@ -22,6 +22,10 @@ public class Gene {
 
     public Colors getColor() {
         return color;
+    }
+
+    public void setColor(Colors color){
+        this.color = color;
     }
 
     @Override

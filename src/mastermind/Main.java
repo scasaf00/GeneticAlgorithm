@@ -18,7 +18,7 @@ public class Main {
     public static final boolean SHOW_MUTATE = true;
 
     //###############################################
-    private static final int NUM_VUELTAS = 1;
+    private static final int NUM_VUELTAS = 2;
     //###############################################
 
     public static void main(String[] args) {
@@ -43,6 +43,7 @@ public class Main {
         population.evaluate(codeToGuess.getGenes());
         //Loop to improve population
         while(/*!population.stopCondition() ||*/ i < NUM_VUELTAS){
+            System.out.println("Generation : "+ (i+1));
             //Selection of the best chromosomes
             population.selection();
             //Crossover

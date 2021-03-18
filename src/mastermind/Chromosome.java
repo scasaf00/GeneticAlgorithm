@@ -66,6 +66,10 @@ public class Chromosome {
         return genes;
     }
 
+    public void setGenes(int pos, Colors color) {
+        this.genes.get(pos).setColor(color);
+    }
+
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder();
