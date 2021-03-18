@@ -12,10 +12,10 @@ public class Population {
     }
 
     public void generate(){
-        for(int i = 0; i < Main.NUM_CHROMOSOMES; i++){
+        for(int i = 0; i < Window.NUM_CHROMOSOMES; i++){
             chromosomes.add(new Chromosome());
         }
-        if(Main.SHOW_GENERATE){
+        if(Window.SHOW_GENERATE){
             System.out.println("\nInitial Population:");
             System.out.println(this.toString());
         }
@@ -42,7 +42,7 @@ public class Population {
             white = 0;
             black = 0;
         }
-        if(Main.SHOW_EVALUATE){
+        if(Window.SHOW_EVALUATE){
             System.out.println("\nEvaluation with color code:");
             System.out.println(" Chromosome\t\t   Reply\t\t Value");
             System.out.println(this.toString());
@@ -50,7 +50,7 @@ public class Population {
     }
 
     public boolean stopCondition(){
-        for(int i = 0; i < Main.NUM_CHROMOSOMES; i++){
+        for(int i = 0; i < Window.NUM_CHROMOSOMES; i++){
             if(chromosomes.get(i).getValue() == 14) return true;
         }
         return false;
@@ -62,10 +62,10 @@ public class Population {
         for (Chromosome chromosome : this.chromosomes) {
             totalFitness += chromosome.getValue();
         }
-        for(int i = 0; i < Main.NUM_CHROMOSOMES; i++) {
+        for(int i = 0; i < Window.NUM_CHROMOSOMES; i++) {
             int rnd = (int) (Math.random() * totalFitness);
             int partialSum = 0;
-            for (int j = Main.NUM_CHROMOSOMES - 1; j >= 0; j--) {
+            for (int j = Window.NUM_CHROMOSOMES - 1; j >= 0; j--) {
                 partialSum += this.chromosomes.get(j).getValue();
                 if (partialSum >= rnd) {
                     newChromosomes.add(new Chromosome(this.chromosomes.get(j).getGenes()));
@@ -74,15 +74,15 @@ public class Population {
             }
         }
         this.chromosomes = newChromosomes;
-        if(Main.SHOW_SELECTED) {
+        if(Window.SHOW_SELECTED) {
             System.out.println(" Seleccion");
             System.out.println(this.toString());
         }
     }
 
     public void crossover(){
-        for(int i = 0; i < Main.NUM_CHROMOSOMES; i += 2){
-            if((i+1) == Main.NUM_CHROMOSOMES) break;
+        for(int i = 0; i < Window.NUM_CHROMOSOMES; i += 2){
+            if((i+1) == Window.NUM_CHROMOSOMES) break;
             for(int j = 2; j < 4; j++){
                 Colors color = this.chromosomes.get(i+1).getGenes().get(j).getColor();
                 this.chromosomes.get(i+1).setGenes(j, color);
@@ -102,6 +102,16 @@ public class Population {
 
     public void setBestChromosome(Chromosome bestChromosome) {
         this.bestChromosome = bestChromosome;
+    }
+
+    public int getTotalFitness(){
+        Iterator<Chromosome> it = chromosomes.iterator();
+        int out = 0;
+        while(it.hasNext()){
+            out += it.next().getValue();
+        }
+
+        return out;
     }
 
     @Override
