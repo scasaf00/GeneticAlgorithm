@@ -10,12 +10,12 @@ import java.util.List;
 
 public class Window extends JFrame {
 
-    public static final int NUM_CHROMOSOMES = 20;
+    public static final int NUM_CHROMOSOMES = 50;
 
     public static final boolean SHOW_GENERATE = false;
     public static final boolean SHOW_EVALUATE = true;
-    public static final boolean SHOW_SELECTED = true;
-    public static final boolean SHOW_CROSSOVER = true;
+    public static final boolean SHOW_SELECTED = false;
+    public static final boolean SHOW_CROSSOVER = false;
     public static final boolean SHOW_MUTATE = true;
 
     //Graph
@@ -27,7 +27,7 @@ public class Window extends JFrame {
     private static javax.swing.JPanel jPanel1;
 
     //###############################################
-    private static final int NUM_VUELTAS = 4;
+    private static final int NUM_VUELTAS = 20;
     //###############################################
 
     public Window() {
@@ -114,7 +114,7 @@ public class Window extends JFrame {
         if(SHOW_GRAPH) {
             try {
                 for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                    if ("Windows".equals(info.getName())) {
+                    if ("Nimbus".equals(info.getName())) {
                         javax.swing.UIManager.setLookAndFeel(info.getClassName());
                         break;
                     }

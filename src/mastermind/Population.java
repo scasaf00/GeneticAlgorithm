@@ -8,7 +8,6 @@ public class Population {
     private Chromosome bestChromosome;
 
     public Population(){
-        //TODO
     }
 
     public void generate(){
@@ -27,13 +26,17 @@ public class Population {
         while (it.hasNext()){
             Chromosome c = it.next();
             List<Gene> genesChromosome = c.getGenes();
-            for(int i = 0; i < 4; i++){
-                for(int j = 0; j < 4-i; j++){
-                    if(genesChromosome.get(i).getColor() == genesCode.get(j).getColor())
+            for(int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4 - i; j++) {
+                    if (genesCode.get(i).getColor() == genesChromosome.get(j).getColor()) {
                         white++;
+                        break;
+                    }
                 }
-                if(genesChromosome.get(i).getColor() == genesCode.get(i).getColor())
+                if (genesCode.get(i).getColor() == genesChromosome.get(i).getColor()){
                     black++;
+                    break;
+                }
             }
             c.setResponse(white, black);
             c.setValue();
@@ -88,8 +91,10 @@ public class Population {
                 this.chromosomes.get(i+1).setGenes(j, color);
             }
         }
-        System.out.println("Crossover:");
-        System.out.println(this.toString());
+        if(Window.SHOW_CROSSOVER) {
+            System.out.println("Crossover:");
+            System.out.println(this.toString());
+        }
     }
 
     public void mutate(){
