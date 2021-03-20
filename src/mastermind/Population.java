@@ -6,6 +6,7 @@ public class Population {
 
     private List<Chromosome> chromosomes = new ArrayList<>();
     private Chromosome bestChromosome;
+    private int generation = 0;
 
     public Population(){
     }
@@ -26,17 +27,23 @@ public class Population {
         while (it.hasNext()){
             Chromosome c = it.next();
             List<Gene> genesChromosome = c.getGenes();
-            for(int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4 - i; j++) {
-                    if (genesCode.get(i).getColor() == genesChromosome.get(j).getColor()) {
+
+            for(int i = 0; i < Window.NUM_GENES; i++){
+                if (genesChromosome.get(i).getColor() == genesCode.get(i).getColor()){
+                    black++;
+                    genesCode.get(i).eveluated = true;
+                    genesChromosome.get(i).eveluated = true;
+                }
+            }
+            for(int i = 0; i < Window.NUM_GENES; i++) {
+                for (int j = 0; j < Window.NUM_GENES; j++) {
+                    if (genesCode.get(i).getColor() == genesChromosome.get(j).getColor() && !genesCode.get(i).eveluated && !genesChromosome.get(j).eveluated) {
                         white++;
-                        break;
+                        genesCode.get(i).eveluated = true;
+                        genesChromosome.get(j).eveluated = true;
                     }
                 }
-                if (genesCode.get(i).getColor() == genesChromosome.get(i).getColor()){
-                    black++;
-                    break;
-                }
+                genesCode.get(i).eveluated = true;
             }
             c.setResponse(white, black);
             c.setValue();
@@ -53,13 +60,11 @@ public class Population {
     }
 
     public boolean stopCondition(){
-        for(int i = 0; i < Window.NUM_CHROMOSOMES; i++){
-            if(chromosomes.get(i).getValue() == 14) return true;
-        }
-        return false;
+        return bestChromosome.getValue() == 14;
     }
 
     public void selection(){
+        generation++;
         List<Chromosome> newChromosomes = new ArrayList<>();
         int totalFitness = 0;
         for (Chromosome chromosome : this.chromosomes) {
@@ -78,27 +83,90 @@ public class Population {
         }
         this.chromosomes = newChromosomes;
         if(Window.SHOW_SELECTED) {
+            System.out.println("Generation: "+this.generation);
             System.out.println(" Seleccion");
             System.out.println(this.toString());
         }
     }
 
     public void crossover(){
-        for(int i = 0; i < Window.NUM_CHROMOSOMES; i += 2){
-            if((i+1) == Window.NUM_CHROMOSOMES) break;
-            for(int j = 2; j < 4; j++){
-                Colors color = this.chromosomes.get(i+1).getGenes().get(j).getColor();
-                this.chromosomes.get(i+1).setGenes(j, color);
+        StringBuilder out = new StringBuilder();
+        for (int i = 0; i < Window.NUM_CHROMOSOMES; i += 2) {
+            if ((i + 1) == this.chromosomes.size())
+                break;
+            int breakPoint = (int) (Math.random()*(Window.NUM_GENES-2)+1);
+
+            out.append("Chromosome before crossover:\t").append(this.chromosomes.get(i).toString()).append(" , ").append(this.chromosomes.get(i + 1).toString()).append("\n");
+
+            for (int j = breakPoint; j < Window.NUM_GENES; j++) {
+                Colors color = this.chromosomes.get(i + 1).getGenes().get(j).getColor();
+                this.chromosomes.get(i + 1).setGenes(j, this.chromosomes.get(i).getGenes().get(j).getColor());
+                this.chromosomes.get(i).setGenes(j, color);
             }
+
+            out.append("Chromosome after crossover:\t\t").append(this.chromosomes.get(i).toString()).append(" , ").append(this.chromosomes.get(i + 1).toString()).append("\n");
         }
-        if(Window.SHOW_CROSSOVER) {
-            System.out.println("Crossover:");
-            System.out.println(this.toString());
-        }
+        if(Window.SHOW_CROSSOVER)
+            System.out.println(out.toString());
     }
 
     public void mutate(){
-        //TODO
+        StringBuilder out = new StringBuilder();
+        if(Window.mutation == Window.Mutations.PER_CHROMOSOME){
+            for(int i = 0; i < Window.NUM_CHROMOSOMES; i++){
+                if((int) (Math.random() * 99) < Window.probabilityMutationPerChromosome){
+                    int mutatePosition = (int) (Math.random() * (Window.NUM_GENES - 1));
+                    out.append("Before mutation:\t").append(this.chromosomes.get(i).toString()).append("\n");
+                    this.chromosomes.get(i).setGenes(mutatePosition, getRandomColor(this.chromosomes.get(i).getGenes().get(mutatePosition).getColor()));
+                    out.append("After mutation:\t\t").append(this.chromosomes.get(i).toString()).append("\n");
+                }else{
+                    out.append("Chromosome ").append(i + 1).append(" didn't mute").append("\n");
+                }
+            }
+        }else{
+            for(int i = 0; i < Window.NUM_CHROMOSOMES; i++){
+                for(int j = 0; j < Window.NUM_GENES; j++){
+                    if(Math.random()*99 < Window.probabilityMutationPerGene){
+                        out.append("Before mutation:\t").append(this.chromosomes.get(i).toString()).append("\n");
+                        this.chromosomes.get(i).setGenes(j, getRandomColor(this.chromosomes.get(i).getGenes().get(j).getColor()));
+                        out.append("After mutation:\t\t").append(this.chromosomes.get(i).toString()).append("\n");
+                    }else{
+                        out.append("Gene ").append(j + 1).append(" from chromosome ").append(i + 1).append(" didn't mute").append("\n");
+                    }
+                }
+            }
+        }
+        if(Window.SHOW_MUTATE)
+            System.out.println(out.toString());
+    }
+
+    private Colors getRandomColor(Colors color){
+        Colors out = color;
+        while(out == color) {
+            switch ((int) (Math.random() * 7) + 1) {
+                case 1:
+                    out = Colors.RED;
+                    break;
+                case 2:
+                    out = Colors.YELLOW;
+                    break;
+                case 3:
+                    out = Colors.BLUE;
+                    break;
+                case 4:
+                    out = Colors.GREEN;
+                    break;
+                case 5:
+                    out = Colors.PURPLE;
+                    break;
+                case 6:
+                    out = Colors.BLACK;
+                    break;
+                case 7:
+                    out = Colors.WHITE;
+            }
+        }
+        return out;
     }
 
     public Chromosome getBestChromosome() {
@@ -115,7 +183,6 @@ public class Population {
         while(it.hasNext()){
             out += it.next().getValue();
         }
-
         return out;
     }
 
@@ -125,8 +192,10 @@ public class Population {
         for (Chromosome chromosome : chromosomes) {
             out.append(chromosome.toString()).append("\n");
         }
-        out.append("\n\t\tBest Chromosome:\n");
-        out.append(bestChromosome.toString()).append("\n");
+        if(this.bestChromosome!=null) {
+            out.append("\n\t\tBest Chromosome:\n");
+            out.append(bestChromosome.toString()).append("\n");
+        }
         return out.toString();
     }
 }

@@ -1,20 +1,18 @@
 package mastermind;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class Chromosome {
 
-    private List<Gene> genes;
+    private final List<Gene> genes;
     private Response response;
     private int value;
 
     // Constructor for the initial guess code
     public Chromosome(){
-        //TODO
         ArrayList<Gene> l = new ArrayList<>();
-        for(int i = 0 ; i < 4; i++){
+        for(int i = 0 ; i < Window.NUM_GENES; i++){
             switch ((int) (Math.random()*7+1)){
                 case 1:
                     l.add(new Gene(Colors.RED));
@@ -73,8 +71,7 @@ public class Chromosome {
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder();
-        Iterator<Gene> it = genes.iterator();
-        while(it.hasNext()) {out.append(it.next().toString());}
+        for (Gene gene : genes) { out.append(gene.toString()); }
         if(this.response != null) out.append("\t").append(response.toString());
         return out.toString();
     }

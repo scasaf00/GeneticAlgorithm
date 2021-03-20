@@ -4,6 +4,8 @@ public class Gene {
 
     private Colors color;
 
+    public boolean eveluated = false;
+
     /*
      *  Colors for terminal
      */

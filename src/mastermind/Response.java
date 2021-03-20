@@ -1,99 +1,25 @@
 package mastermind;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Response {
-    private final Gene[] reply = {new Gene(Colors.EMPTY), new Gene(Colors.EMPTY), new Gene(Colors.EMPTY), new Gene(Colors.EMPTY)};
+    private final List<Gene> reply = new ArrayList<>();
     private int numericalValue;
 
     public Response(int white, int black){
 
-        switch (black){
-            case 0:
-                switch (white){
-                    case 1:
-                        reply[0] = new Gene(Colors.WHITE);
-                        break;
-                    case 2:
-                        reply[0] = new Gene(Colors.WHITE);
-                        reply[1] = new Gene(Colors.WHITE);
-                        break;
-                    case 3:
-                        reply[0] = new Gene(Colors.WHITE);
-                        reply[1] = new Gene(Colors.WHITE);
-                        reply[2] = new Gene(Colors.WHITE);
-                        break;
-                    case 4:
-                        reply[0] = new Gene(Colors.WHITE);
-                        reply[1] = new Gene(Colors.WHITE);
-                        reply[2] = new Gene(Colors.WHITE);
-                        reply[3] = new Gene(Colors.WHITE);
-                        break;
-                }
-                break;
-            case 1:
-                switch (white){
-                    case 0:
-                        reply[0] = new Gene(Colors.BLACK);
-                        break;
-                    case 1:
-                        reply[0] = new Gene(Colors.BLACK);
-                        reply[1] = new Gene(Colors.WHITE);
-                        break;
-                    case 2:
-                        reply[0] = new Gene(Colors.BLACK);
-                        reply[1] = new Gene(Colors.WHITE);
-                        reply[2] = new Gene(Colors.WHITE);
-                        break;
-                    case 3:
-                        reply[0] = new Gene(Colors.BLACK);
-                        reply[1] = new Gene(Colors.WHITE);
-                        reply[2] = new Gene(Colors.WHITE);
-                        reply[3] = new Gene(Colors.WHITE);
-                        break;
-                }
-                break;
-            case 2:
-                switch (white){
-                    case 0:
-                        reply[0] = new Gene(Colors.BLACK);
-                        reply[1] = new Gene(Colors.BLACK);
-                        break;
-                    case 1:
-                        reply[0] = new Gene(Colors.BLACK);
-                        reply[1] = new Gene(Colors.BLACK);
-                        reply[2] = new Gene(Colors.WHITE);
-                        break;
-                    case 2:
-                        reply[0] = new Gene(Colors.BLACK);
-                        reply[1] = new Gene(Colors.BLACK);
-                        reply[2] = new Gene(Colors.WHITE);
-                        reply[3] = new Gene(Colors.WHITE);
-                        break;
-                }
-                break;
-            case 3:
-                switch (white){
-                    case 0:
-                        reply[0] = new Gene(Colors.BLACK);
-                        reply[1] = new Gene(Colors.BLACK);
-                        reply[2] = new Gene(Colors.BLACK);
-                        break;
-                    case 1:
-                        reply[0] = new Gene(Colors.BLACK);
-                        reply[1] = new Gene(Colors.BLACK);
-                        reply[2] = new Gene(Colors.BLACK);
-                        reply[3] = new Gene(Colors.WHITE);
-                        break;
-                }
-                break;
-            case 4:
-                reply[0] = new Gene(Colors.BLACK);
-                reply[1] = new Gene(Colors.BLACK);
-                reply[2] = new Gene(Colors.BLACK);
-                reply[3] = new Gene(Colors.BLACK);
-                break;
+        for(int i = 0; i < Window.NUM_GENES; i++){
+            reply.add(new Gene(Colors.EMPTY));
         }
+
+        for(int i = 0; i < white; i++){
+            reply.get(i).setColor(Colors.WHITE);
+        }
+        for(int i = white; i < (black+white); i++){
+            reply.get(i).setColor(Colors.BLACK);
+        }
+
         setChromosomeValue(white, black);
     }
 
@@ -113,7 +39,7 @@ public class Response {
         return numericalValue;
     }
 
-    public Gene[] getReply(){
+    public List<Gene> getReply(){
         return reply;
     }
 
@@ -121,7 +47,7 @@ public class Response {
     public String toString() {
         StringBuilder out = new StringBuilder();
         for(int i = 0; i < 4; i++) {
-            out.append(reply[i].toString());
+            out.append(reply.get(i).toString());
         }
         out.append("\t->\t").append(numericalValue);
         return out.toString();

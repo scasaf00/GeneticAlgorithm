@@ -48,26 +48,26 @@ public class Graph extends ImageIcon {
         XYSeries generations = new XYSeries("Total Fitness");
         XYSeries chromosomes = new XYSeries("Best Chromosome Fitness");
 
-        Iterator<Integer> it = fitness.iterator();
-        int i = 0;
-        while(it.hasNext()){
-            int in = it.next();
-            generations.add(i, in);
-            i++;
-        }
+        addAxis(fitness, generations);
 
-        Iterator<Integer> it2 = bestChromosomeFitness.iterator();
-        int j = 0;
-        while (it2.hasNext()){
-            int in = it2.next();
-            chromosomes.add(j, in);
-            j++;
-        }
+        addAxis(bestChromosomeFitness, chromosomes);
 
         XYSeriesCollection xySeriesCollection =  new XYSeriesCollection();
         xySeriesCollection.addSeries(generations);
         xySeriesCollection.addSeries(chromosomes);
 
         return xySeriesCollection;
+    }
+
+    private void addAxis(List<Integer> axis, XYSeries serie) {
+        Iterator<Integer> it = axis.iterator();
+        int total = axis.size();
+        int i = 0;
+        while (it.hasNext()){
+            int in = it.next();
+            if(i%Window.GRAPH_INTERVAL==0) serie.add(i, in);
+            if(i+1 == total) serie.add(i, in);
+            i++;
+        }
     }
 }
