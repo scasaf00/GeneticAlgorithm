@@ -1,4 +1,4 @@
-package mastermind;
+package mastermind.utils;
 
 public enum Colors {
     RED,    // -> 1/7

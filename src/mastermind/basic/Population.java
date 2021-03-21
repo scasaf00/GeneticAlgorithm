@@ -1,4 +1,7 @@
-package mastermind;
+package mastermind.basic;
+
+import mastermind.Window;
+import mastermind.utils.Colors;
 
 import java.util.*;
 
@@ -7,6 +10,7 @@ public class Population {
     private List<Chromosome> chromosomes = new ArrayList<>();
     private Chromosome bestChromosome;
     private int generation = 0;
+    private int totalFitness = 0;
 
     public Population(){
     }
@@ -16,8 +20,7 @@ public class Population {
             chromosomes.add(new Chromosome());
         }
         if(Window.SHOW_GENERATE){
-            System.out.println("\nInitial Population:");
-            System.out.println(this.toString());
+            new ThreadShowGenerate().run(this);
         }
     }
 
@@ -47,15 +50,14 @@ public class Population {
             }
             c.setResponse(white, black);
             c.setValue();
+            totalFitness += c.getValue();
             if(this.getBestChromosome() == null || c.getValue() > this.getBestChromosome().getValue())
                 this.setBestChromosome(c);
             white = 0;
             black = 0;
         }
         if(Window.SHOW_EVALUATE){
-            System.out.println("\nEvaluation with color code:");
-            System.out.println(" Chromosome\t\t   Reply\t\t Value");
-            System.out.println(this.toString());
+           new ThreadShowEvaluate().run(this);
         }
     }
 
@@ -83,9 +85,7 @@ public class Population {
         }
         this.chromosomes = newChromosomes;
         if(Window.SHOW_SELECTED) {
-            System.out.println("Generation: "+this.generation);
-            System.out.println(" Seleccion");
-            System.out.println(this.toString());
+            new ThreadShowSelect().run(this);
         }
     }
 
@@ -107,7 +107,7 @@ public class Population {
             out.append("Chromosome after crossover:\t\t").append(this.chromosomes.get(i).toString()).append(" , ").append(this.chromosomes.get(i + 1).toString()).append("\n");
         }
         if(Window.SHOW_CROSSOVER)
-            System.out.println(out.toString());
+           new ThreadShowCrossoverMutate().run(out);
     }
 
     public void mutate(){
@@ -137,7 +137,7 @@ public class Population {
             }
         }
         if(Window.SHOW_MUTATE)
-            System.out.println(out.toString());
+           new ThreadShowCrossoverMutate().run(out);
     }
 
     private Colors getRandomColor(Colors color){
@@ -178,24 +178,65 @@ public class Population {
     }
 
     public int getTotalFitness(){
-        Iterator<Chromosome> it = chromosomes.iterator();
-        int out = 0;
-        while(it.hasNext()){
-            out += it.next().getValue();
-        }
-        return out;
+        return this.totalFitness;
+    }
+
+    public int getAverageFitness(){
+        return this.totalFitness/Window.NUM_CHROMOSOMES;
     }
 
     @Override
     public String toString() {
-        StringBuilder out = new StringBuilder();
-        for (Chromosome chromosome : chromosomes) {
-            out.append(chromosome.toString()).append("\n");
-        }
-        if(this.bestChromosome!=null) {
-            out.append("\n\t\tBest Chromosome:\n");
-            out.append(bestChromosome.toString()).append("\n");
-        }
-        return out.toString();
+        return new ThreadToString().call();
     }
+
+    private class ThreadToString extends Thread{
+        public ThreadToString(){ super(); }
+        public String call(){
+            StringBuilder out = new StringBuilder();
+            for (Chromosome chromosome : chromosomes) {
+                out.append(chromosome.toString()).append("\n");
+            }
+            if(bestChromosome!=null) {
+                out.append("\n\t\tBest Chromosome:\n");
+                out.append(bestChromosome.toString()).append("\n");
+            }
+            return out.toString();
+        }
+    }
+
+    private static class ThreadShowGenerate extends Thread{
+        public ThreadShowGenerate(){ super ();}
+        public void run(Object o){
+            System.out.println("\nInitial Population:");
+            System.out.println(o.toString());
+        }
+    }
+
+    private static class ThreadShowEvaluate extends Thread{
+        public ThreadShowEvaluate(){ super ();}
+        public void run(Object o){
+            System.out.println("\nEvaluation with color code:");
+            System.out.println(" Chromosome\t\t   Reply\t\t Value");
+            System.out.println(o.toString());
+        }
+    }
+
+    private class ThreadShowSelect extends Thread{
+        public ThreadShowSelect(){ super ();}
+        public void run(Object o){
+            System.out.println("Generation: "+generation);
+            System.out.println(" Seleccion");
+            System.out.println(o.toString());
+        }
+    }
+
+    private static class ThreadShowCrossoverMutate extends Thread{
+        public ThreadShowCrossoverMutate(){ super ();}
+        public void run(Object o){
+            System.out.println(o.toString());
+        }
+    }
+
 }
+

@@ -1,5 +1,6 @@
-package mastermind;
+package mastermind.utils;
 
+import mastermind.Window;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.labels.StandardXYItemLabelGenerator;
@@ -18,8 +19,8 @@ import java.util.List;
 
 public class Graph extends ImageIcon {
 
-    public Graph(Dimension d, List<Integer> fitness, List<Integer> bestChromosomeFitness){
-        XYDataset dataset = xyDataset(fitness, bestChromosomeFitness);
+    public Graph(Dimension d, List<Integer> fitness, List<Integer> bestChromosomeFitness, List<Integer> averageFitness){
+        XYDataset dataset = xyDataset(fitness, bestChromosomeFitness, averageFitness);
 
         JFreeChart jFreeChart = ChartFactory.createXYLineChart(
                 "Fitness in generations", "Generations", "Fitness",
@@ -44,17 +45,19 @@ public class Graph extends ImageIcon {
         
     }
 
-    private XYDataset xyDataset(List<Integer> fitness, List<Integer> bestChromosomeFitness) {
+    private XYDataset xyDataset(List<Integer> fitness, List<Integer> bestChromosomeFitness, List<Integer> averageFitness) {
         XYSeries generations = new XYSeries("Total Fitness");
         XYSeries chromosomes = new XYSeries("Best Chromosome Fitness");
+        XYSeries generationsAverage = new XYSeries("Average Fitness");
 
         addAxis(fitness, generations);
-
         addAxis(bestChromosomeFitness, chromosomes);
+        addAxis(averageFitness, generationsAverage);
 
         XYSeriesCollection xySeriesCollection =  new XYSeriesCollection();
         xySeriesCollection.addSeries(generations);
         xySeriesCollection.addSeries(chromosomes);
+        xySeriesCollection.addSeries(generationsAverage);
 
         return xySeriesCollection;
     }
@@ -65,9 +68,29 @@ public class Graph extends ImageIcon {
         int i = 0;
         while (it.hasNext()){
             int in = it.next();
-            if(i%Window.GRAPH_INTERVAL==0) serie.add(i, in);
+            if(i% mastermind.Window.GRAPH_INTERVAL==0) serie.add(i, in);
             if(i+1 == total) serie.add(i, in);
             i++;
+        }
+    }
+
+    public static class ThreadGrpah extends Thread{
+        public ThreadGrpah(){
+            super();
+        }
+        public void run(){
+            try {
+                for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                    if ("Nimbus".equals(info.getName())) {
+                        javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                        break;
+                    }
+                }
+            } catch (Exception ex) {
+                java.util.logging.Logger.getLogger(mastermind.Window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            }
+            /* Create and display the form */
+            java.awt.EventQueue.invokeLater(() -> new Window().setVisible(true));
         }
     }
 }

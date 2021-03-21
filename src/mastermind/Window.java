@@ -1,8 +1,8 @@
-/**
- * @Author Sergio Casado Fernandez
- * @Version 1.0
- */
 package mastermind;
+
+import mastermind.basic.Chromosome;
+import mastermind.basic.Population;
+import mastermind.utils.Graph;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -16,8 +16,9 @@ public class Window extends JFrame {
     }
 
     //Graph
-    public static List<Integer> fitness = new ArrayList<>();
-    public static List<Integer> bestChromosomeFitness = new ArrayList<>();
+    private static final List<Integer> fitness = new ArrayList<>();
+    private static final List<Integer> bestChromosomeFitness = new ArrayList<>();
+    private static final List<Integer> averageFitness = new ArrayList<>();
     private static javax.swing.JLabel jLabel1;
     private static javax.swing.JPanel jPanel1;
 
@@ -37,14 +38,12 @@ public class Window extends JFrame {
     // Visibility options
     private static final boolean SHOW_GRAPH = true;
     public static final int GRAPH_INTERVAL = 50;
-    public static final boolean SHOW_GENERATE = false;
-    public static final boolean SHOW_EVALUATE = false;
-    public static final boolean SHOW_SELECTED = false;
-    public static final boolean SHOW_CROSSOVER = false;
-    public static final boolean SHOW_MUTATE = false;
+    public static final boolean SHOW_GENERATE = true;
+    public static final boolean SHOW_EVALUATE = true;
+    public static final boolean SHOW_SELECTED = true;
+    public static final boolean SHOW_CROSSOVER = true;
+    public static final boolean SHOW_MUTATE = true;
     //##################################################################
-
-    private static final int NUM_VUELTAS = 2;
 
     public Window() {
         // Graph view
@@ -52,7 +51,7 @@ public class Window extends JFrame {
         setLocationRelativeTo(null);
         this.setTitle("Relation between Generations and Fitness");
 
-        jLabel1.setIcon(new Graph(jPanel1.getSize(), fitness, bestChromosomeFitness));
+        jLabel1.setIcon(new Graph(jPanel1.getSize(), fitness, bestChromosomeFitness, averageFitness));
         jLabel1.setText("");
     }
 
@@ -116,6 +115,7 @@ public class Window extends JFrame {
             // Only for the graph view
             Window.fitness.add(population.getTotalFitness());
             Window.bestChromosomeFitness.add(population.getBestChromosome().getValue());
+            Window.averageFitness.add(population.getAverageFitness());
             i++;
         }
         /*
@@ -131,18 +131,7 @@ public class Window extends JFrame {
         System.out.println(codeToGuess.toString());
 
         if(SHOW_GRAPH) {
-            try {
-                for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                    if ("Nimbus".equals(info.getName())) {
-                        javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                        break;
-                    }
-                }
-            } catch (Exception ex) {
-                java.util.logging.Logger.getLogger(Window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            }
-            /* Create and display the form */
-            java.awt.EventQueue.invokeLater(() -> new Window().setVisible(true));
+            new Graph.ThreadGrpah().start();
         }
     }
 }

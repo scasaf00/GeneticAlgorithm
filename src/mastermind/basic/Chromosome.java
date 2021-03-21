@@ -1,4 +1,7 @@
-package mastermind;
+package mastermind.basic;
+
+import mastermind.Window;
+import mastermind.utils.Colors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +15,7 @@ public class Chromosome {
     // Constructor for the initial guess code
     public Chromosome(){
         ArrayList<Gene> l = new ArrayList<>();
-        for(int i = 0 ; i < Window.NUM_GENES; i++){
+        for(int i = 0; i < Window.NUM_GENES; i++){
             switch ((int) (Math.random()*7+1)){
                 case 1:
                     l.add(new Gene(Colors.RED));
@@ -52,10 +55,6 @@ public class Chromosome {
         return value;
     }
 
-    public Response getResponse() {
-        return response;
-    }
-
     public void setResponse(int white, int black){
         this.response = new Response(white, black);
     }
@@ -70,9 +69,18 @@ public class Chromosome {
 
     @Override
     public String toString() {
-        StringBuilder out = new StringBuilder();
-        for (Gene gene : genes) { out.append(gene.toString()); }
-        if(this.response != null) out.append("\t").append(response.toString());
-        return out.toString();
+        return new ThreadToString().call();
+    }
+
+    private class ThreadToString extends Thread{
+        public ThreadToString(){
+            super();
+        }
+        public String call(){
+            StringBuilder out = new StringBuilder();
+            for (Gene gene : genes) { out.append(gene.toString()); }
+            if(response != null) out.append("\t").append(response.toString());
+            return out.toString();
+        }
     }
 }
