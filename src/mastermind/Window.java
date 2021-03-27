@@ -2,6 +2,7 @@ package mastermind;
 
 import mastermind.basic.Chromosome;
 import mastermind.basic.Population;
+import mastermind.utils.Colors;
 import mastermind.utils.Graph;
 
 import javax.swing.*;
@@ -22,6 +23,8 @@ public class Window extends JFrame {
     private static javax.swing.JLabel jLabel1;
     private static javax.swing.JPanel jPanel1;
 
+    public static final boolean DEV_OPS = true;
+
     //##################################################################
 
     //Mutation Option
@@ -33,7 +36,7 @@ public class Window extends JFrame {
 
     // Number of the chromosomes and genes
     public static final int NUM_CHROMOSOMES = 30;
-    public static final int NUM_GENES = 4;
+    public static int NUM_GENES = 4;
 
     // Visibility options
     private static final boolean SHOW_GRAPH = true;
@@ -84,7 +87,16 @@ public class Window extends JFrame {
     public static void main(String[] args) {
 
         Chromosome bestChromosome;
-        Chromosome codeToGuess = new Chromosome();
+        Chromosome codeToGuess;
+
+        if(DEV_OPS) {
+            codeToGuess = new Chromosome(Colors.RED, Colors.RED, Colors.YELLOW, Colors.RED);
+            NUM_GENES = 4;
+        }
+        else
+            codeToGuess = new Chromosome();
+
+
         Population population = new Population();
 
         System.out.println("\tWELCOME TO MASTERMIND GAME\n");
@@ -102,8 +114,10 @@ public class Window extends JFrame {
         // Only for the graph view
         Window.fitness.add(population.getTotalFitness());
         Window.bestChromosomeFitness.add(population.getBestChromosome().getValue());
+        Window.averageFitness.add(population.getAverageFitness());
         //Loop to improve population
         while (!population.stopCondition()) {
+            population.totalFitness = 0;
             //Selection of the best chromosomes
             population.selection();
             //Crossover

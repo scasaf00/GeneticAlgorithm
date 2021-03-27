@@ -10,7 +10,7 @@ public class Population {
     private List<Chromosome> chromosomes = new ArrayList<>();
     private Chromosome bestChromosome;
     private int generation = 0;
-    private int totalFitness = 0;
+    public int totalFitness = 0;
 
     public Population(){
     }
@@ -96,7 +96,7 @@ public class Population {
                 break;
             int breakPoint = (int) (Math.random()*(Window.NUM_GENES-2)+1);
 
-            out.append("Chromosome before crossover:\t").append(this.chromosomes.get(i).toString()).append(" , ").append(this.chromosomes.get(i + 1).toString()).append("\n");
+            out.append("Chromosomes ").append(i).append(" y ").append(i+1).append(" before crossover:\t").append(this.chromosomes.get(i).toString()).append(" , ").append(this.chromosomes.get(i + 1).toString()).append("\n");
 
             for (int j = breakPoint; j < Window.NUM_GENES; j++) {
                 Colors color = this.chromosomes.get(i + 1).getGenes().get(j).getColor();
@@ -104,7 +104,8 @@ public class Population {
                 this.chromosomes.get(i).setGenes(j, color);
             }
 
-            out.append("Chromosome after crossover:\t\t").append(this.chromosomes.get(i).toString()).append(" , ").append(this.chromosomes.get(i + 1).toString()).append("\n");
+            out.append("Chromosomes ").append(i).append(" y ").append(i+1).append(" after crossover:\t").append(this.chromosomes.get(i).toString()).append(" , ").append(this.chromosomes.get(i + 1).toString()).append("\n");
+            out.append("-------------------------------------------------------------------\n");
         }
         if(Window.SHOW_CROSSOVER)
            new ThreadShowCrossoverMutate().run(out);
@@ -114,24 +115,22 @@ public class Population {
         StringBuilder out = new StringBuilder();
         if(Window.mutation == Window.Mutations.PER_CHROMOSOME){
             for(int i = 0; i < Window.NUM_CHROMOSOMES; i++){
-                if((int) (Math.random() * 99) < Window.probabilityMutationPerChromosome){
+                if((int) (Math.random() * 99) < Window.probabilityMutationPerChromosome) {
                     int mutatePosition = (int) (Math.random() * (Window.NUM_GENES - 1));
-                    out.append("Before mutation:\t").append(this.chromosomes.get(i).toString()).append("\n");
+                    out.append("Chromosome ").append(i+1).append(" before Gene ").append(mutatePosition+1).append(" mutated:\t").append(this.chromosomes.get(i).toString()).append("\n");
                     this.chromosomes.get(i).setGenes(mutatePosition, getRandomColor(this.chromosomes.get(i).getGenes().get(mutatePosition).getColor()));
-                    out.append("After mutation:\t\t").append(this.chromosomes.get(i).toString()).append("\n");
-                }else{
-                    out.append("Chromosome ").append(i + 1).append(" didn't mute").append("\n");
+                    out.append("Chromosome ").append(i+1).append(" after Gene ").append(mutatePosition+1).append(" mutated:\t").append(this.chromosomes.get(i).toString()).append("\n");
+                    out.append("------------------------------------------------------\n");
                 }
             }
         }else{
             for(int i = 0; i < Window.NUM_CHROMOSOMES; i++){
                 for(int j = 0; j < Window.NUM_GENES; j++){
-                    if(Math.random()*99 < Window.probabilityMutationPerGene){
-                        out.append("Before mutation:\t").append(this.chromosomes.get(i).toString()).append("\n");
+                    if(Math.random()*99 < Window.probabilityMutationPerGene) {
+                        out.append("Chromosome ").append(i+1).append(" before Gene ").append(j+1).append(" mutated:\t").append(this.chromosomes.get(i).toString()).append("\n");
                         this.chromosomes.get(i).setGenes(j, getRandomColor(this.chromosomes.get(i).getGenes().get(j).getColor()));
-                        out.append("After mutation:\t\t").append(this.chromosomes.get(i).toString()).append("\n");
-                    }else{
-                        out.append("Gene ").append(j + 1).append(" from chromosome ").append(i + 1).append(" didn't mute").append("\n");
+                        out.append("Chromosome ").append(i+1).append(" before Gene ").append(j+1).append(" mutated:\t").append(this.chromosomes.get(i).toString()).append("\n");
+                        out.append("------------------------------------------------------\n");
                     }
                 }
             }

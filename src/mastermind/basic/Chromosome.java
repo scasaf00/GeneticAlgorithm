@@ -47,6 +47,15 @@ public class Chromosome {
         this.genes = genes;
     }
 
+    public Chromosome(Colors c1, Colors c2, Colors c3, Colors c4){
+        ArrayList<Gene> l = new ArrayList<>();
+        l.add(new Gene(c1));
+        l.add(new Gene(c2));
+        l.add(new Gene(c3));
+        l.add(new Gene(c4));
+        this.genes = l;
+    }
+
     public void setValue() {
        this.value = this.response.getNumericalValue();
     }
