@@ -6,7 +6,7 @@ import mastermind.utils.Colors;
 import mastermind.utils.Graph;
 
 import javax.swing.*;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Window extends JFrame {
@@ -17,30 +17,29 @@ public class Window extends JFrame {
     }
 
     //Graph
-    private static final List<Integer> fitness = new ArrayList<>();
-    private static final List<Integer> bestChromosomeFitness = new ArrayList<>();
-    private static final List<Integer> averageFitness = new ArrayList<>();
+    private static final List<Integer> fitness = new LinkedList<>();
+    private static final List<Integer> bestChromosomeFitness = new LinkedList<>();
+    private static final List<Integer> averageFitness = new LinkedList<>();
     private static javax.swing.JLabel jLabel1;
     private static javax.swing.JPanel jPanel1;
 
     public static final boolean DEV_OPS = true;
 
     //##################################################################
-
     //Mutation Option
-    public static final Mutations mutation = Mutations.PER_GEN;
+    public static final Mutations mutation = Mutations.PER_CHROMOSOME;
 
     // Probability options
-    public static final int probabilityMutationPerChromosome = 25;
-    public static final int probabilityMutationPerGene = 25;
+    public static final int probabilityMutationPerChromosome = 10;
+    public static final int probabilityMutationPerGene = 20;
 
     // Number of the chromosomes and genes
-    public static final int NUM_CHROMOSOMES = 30;
+    public static final int NUM_CHROMOSOMES = 20;
     public static int NUM_GENES = 4;
 
     // Visibility options
     private static final boolean SHOW_GRAPH = true;
-    public static final int GRAPH_INTERVAL = 50;
+    public static final int GRAPH_INTERVAL = 100;
     public static final boolean SHOW_GENERATE = true;
     public static final boolean SHOW_EVALUATE = true;
     public static final boolean SHOW_SELECTED = true;
@@ -131,6 +130,7 @@ public class Window extends JFrame {
             Window.bestChromosomeFitness.add(population.getBestChromosome().getValue());
             Window.averageFitness.add(population.getAverageFitness());
             i++;
+            population.totalFitness = 0;
         }
         /*
          *  End of the genetic algorithm

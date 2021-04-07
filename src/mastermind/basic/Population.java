@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Population {
 
-    private List<Chromosome> chromosomes = new ArrayList<>();
+    private List<Chromosome> chromosomes = new LinkedList<>();
     private Chromosome bestChromosome;
     private int generation = 0;
     public int totalFitness = 0;
@@ -25,7 +25,7 @@ public class Population {
     }
 
     public void evaluate(List<Gene> genesCode){
-        Iterator<Chromosome> it = chromosomes.iterator();
+        Iterator<Chromosome> it = this.chromosomes.iterator();
         int white = 0, black = 0;
         while (it.hasNext()){
             Chromosome c = it.next();
@@ -62,12 +62,23 @@ public class Population {
     }
 
     public boolean stopCondition(){
-        return bestChromosome.getValue() == 14;
+        List<Gene> win = new LinkedList<>();
+        for(int i = 0; i < Window.NUM_GENES; i++){
+            win.add(new Gene(Colors.BLACK));
+        }
+        Iterator<Gene> it = this.bestChromosome.getResponse().getReply().iterator();
+        Iterator<Gene> it2 = win.iterator();
+        while(it.hasNext()){
+            if(it.next().getColor() != it2.next().getColor()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void selection(){
         generation++;
-        List<Chromosome> newChromosomes = new ArrayList<>();
+        List<Chromosome> newChromosomes = new LinkedList<>();
         int totalFitness = 0;
         for (Chromosome chromosome : this.chromosomes) {
             totalFitness += chromosome.getValue();
@@ -89,13 +100,14 @@ public class Population {
         }
     }
 
+    // FALLA ESTO TODO
     public void crossover(){
         StringBuilder out = new StringBuilder();
         for (int i = 0; i < Window.NUM_CHROMOSOMES; i += 2) {
             if ((i + 1) == this.chromosomes.size())
                 break;
-            int breakPoint = (int) (Math.random()*(Window.NUM_GENES-2)+1);
-
+            int breakPoint = (int) (Math.random()*(Window.NUM_GENES-1)+1);
+            System.out.println(breakPoint);
             out.append("Chromosomes ").append(i).append(" y ").append(i+1).append(" before crossover:\t").append(this.chromosomes.get(i).toString()).append(" , ").append(this.chromosomes.get(i + 1).toString()).append("\n");
 
             for (int j = breakPoint; j < Window.NUM_GENES; j++) {

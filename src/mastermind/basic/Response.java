@@ -2,12 +2,11 @@ package mastermind.basic;
 
 import mastermind.Window;
 import mastermind.utils.Colors;
-
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Response {
-    private final List<Gene> reply = new ArrayList<>();
+    private final List<Gene> reply = new LinkedList<>();
     private int numericalValue;
 
     public Response(int white, int black){
@@ -41,6 +40,8 @@ public class Response {
         return numericalValue;
     }
 
+    public List<Gene> getReply(){return this.reply;}
+
     @Override
     public String toString() {
         return new ThreadToString().call();
@@ -52,7 +53,7 @@ public class Response {
         }
         public String call(){
             StringBuilder out = new StringBuilder();
-            for(int i = 0; i < 4; i++) {
+            for(int i = 0; i < Window.NUM_GENES; i++) {
                 out.append(reply.get(i).toString());
             }
             out.append("\t->\t").append(numericalValue);

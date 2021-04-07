@@ -3,7 +3,7 @@ package mastermind.basic;
 import mastermind.Window;
 import mastermind.utils.Colors;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Chromosome {
@@ -11,10 +11,11 @@ public class Chromosome {
     private final List<Gene> genes;
     private Response response;
     private int value;
+    private boolean elite = false;
 
     // Constructor for the initial guess code
     public Chromosome(){
-        ArrayList<Gene> l = new ArrayList<>();
+        List<Gene> l = new LinkedList<>();
         for(int i = 0; i < Window.NUM_GENES; i++){
             switch ((int) (Math.random()*7+1)){
                 case 1:
@@ -48,7 +49,7 @@ public class Chromosome {
     }
 
     public Chromosome(Colors c1, Colors c2, Colors c3, Colors c4){
-        ArrayList<Gene> l = new ArrayList<>();
+        List<Gene> l = new LinkedList<>();
         l.add(new Gene(c1));
         l.add(new Gene(c2));
         l.add(new Gene(c3));
@@ -75,6 +76,10 @@ public class Chromosome {
     public void setGenes(int pos, Colors color) {
         this.genes.get(pos).setColor(color);
     }
+
+    public Response getResponse(){ return this.response; }
+
+    public Boolean getElite(){return this.elite;}
 
     @Override
     public String toString() {

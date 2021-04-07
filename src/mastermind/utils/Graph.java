@@ -68,7 +68,7 @@ public class Graph extends ImageIcon {
         int i = 0;
         while (it.hasNext()){
             int in = it.next();
-            if(i% mastermind.Window.GRAPH_INTERVAL==0) serie.add(i, in);
+            if(i%Window.GRAPH_INTERVAL==0) serie.add(i, in);
             if(i+1 == total) serie.add(i, in);
             i++;
         }
