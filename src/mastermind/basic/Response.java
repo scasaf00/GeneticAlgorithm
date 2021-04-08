@@ -8,8 +8,13 @@ import java.util.List;
 public class Response {
     private final List<Gene> reply = new LinkedList<>();
     private int numericalValue;
+    private final int white;
+    private final int black;
 
     public Response(int white, int black){
+
+        this.white = white;
+        this.black = black;
 
         for(int i = 0; i < Window.NUM_GENES; i++){
             reply.add(new Gene(Colors.EMPTY));
@@ -41,6 +46,10 @@ public class Response {
     }
 
     public List<Gene> getReply(){return this.reply;}
+
+    public int getWhite() { return white; }
+
+    public int getBlack() { return black; }
 
     @Override
     public String toString() {

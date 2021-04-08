@@ -51,8 +51,12 @@ public class Population {
             c.setResponse(white, black);
             c.setValue();
             totalFitness += c.getValue();
-            if(this.getBestChromosome() == null || c.getValue() > this.getBestChromosome().getValue())
-                this.setBestChromosome(c);
+            if(this.getBestChromosome() == null || c.getValue() > this.getBestChromosome().getValue()){
+                Chromosome chromosome = new Chromosome(c.getGenes());
+                chromosome.setResponse(c.getResponse().getWhite(), c.getResponse().getBlack());
+                chromosome.setValue();
+                this.setBestChromosome(chromosome);
+            }
             white = 0;
             black = 0;
         }
@@ -100,39 +104,49 @@ public class Population {
         }
     }
 
-    // FALLA ESTO TODO
     public void crossover(){
         StringBuilder out = new StringBuilder();
+        List<Chromosome> newChromosomes = new LinkedList<>();
         for (int i = 0; i < Window.NUM_CHROMOSOMES; i += 2) {
             if ((i + 1) == this.chromosomes.size())
                 break;
             int breakPoint = (int) (Math.random()*(Window.NUM_GENES-1)+1);
-            System.out.println(breakPoint);
             out.append("Chromosomes ").append(i).append(" y ").append(i+1).append(" before crossover:\t").append(this.chromosomes.get(i).toString()).append(" , ").append(this.chromosomes.get(i + 1).toString()).append("\n");
 
+            Chromosome chromosome1 = new Chromosome(this.chromosomes.get(i+1).getGenes());
+            Chromosome chromosome2 = new Chromosome(this.chromosomes.get(i).getGenes());
             for (int j = breakPoint; j < Window.NUM_GENES; j++) {
                 Colors color = this.chromosomes.get(i + 1).getGenes().get(j).getColor();
-                this.chromosomes.get(i + 1).setGenes(j, this.chromosomes.get(i).getGenes().get(j).getColor());
-                this.chromosomes.get(i).setGenes(j, color);
+                chromosome1.setGenes(j, this.chromosomes.get(i).getGenes().get(j).getColor());
+                chromosome2.setGenes(j, color);
             }
+            newChromosomes.add(chromosome1);
+            newChromosomes.add(chromosome2);
 
-            out.append("Chromosomes ").append(i).append(" y ").append(i+1).append(" after crossover:\t").append(this.chromosomes.get(i).toString()).append(" , ").append(this.chromosomes.get(i + 1).toString()).append("\n");
+            out.append("Chromosomes ").append(i).append(" y ").append(i+1).append(" after crossover:\t").append(chromosome1).append(" , ").append(chromosome2).append("\n");
             out.append("-------------------------------------------------------------------\n");
         }
+        this.chromosomes.clear();
+        this.chromosomes.addAll(newChromosomes);
         if(Window.SHOW_CROSSOVER)
            new ThreadShowCrossoverMutate().run(out);
     }
 
     public void mutate(){
         StringBuilder out = new StringBuilder();
+        List<Chromosome> newChromosomes = new LinkedList<>();
         if(Window.mutation == Window.Mutations.PER_CHROMOSOME){
             for(int i = 0; i < Window.NUM_CHROMOSOMES; i++){
                 if((int) (Math.random() * 99) < Window.probabilityMutationPerChromosome) {
                     int mutatePosition = (int) (Math.random() * (Window.NUM_GENES - 1));
                     out.append("Chromosome ").append(i+1).append(" before Gene ").append(mutatePosition+1).append(" mutated:\t").append(this.chromosomes.get(i).toString()).append("\n");
-                    this.chromosomes.get(i).setGenes(mutatePosition, getRandomColor(this.chromosomes.get(i).getGenes().get(mutatePosition).getColor()));
-                    out.append("Chromosome ").append(i+1).append(" after Gene ").append(mutatePosition+1).append(" mutated:\t").append(this.chromosomes.get(i).toString()).append("\n");
+                    Chromosome chromosome = new Chromosome(this.chromosomes.get(i).getGenes());
+                    chromosome.setGenes(mutatePosition, getRandomColor(chromosome.getGenes().get(mutatePosition).getColor()));
+                    newChromosomes.add(chromosome);
+                    out.append("Chromosome ").append(i+1).append(" after Gene ").append(mutatePosition+1).append(" mutated:\t").append(chromosome).append("\n");
                     out.append("------------------------------------------------------\n");
+                } else {
+                    newChromosomes.add(new Chromosome(this.chromosomes.get(i).getGenes()));
                 }
             }
         }else{
@@ -147,6 +161,8 @@ public class Population {
                 }
             }
         }
+        this.chromosomes.clear();
+        this.chromosomes.addAll(newChromosomes);
         if(Window.SHOW_MUTATE)
            new ThreadShowCrossoverMutate().run(out);
     }

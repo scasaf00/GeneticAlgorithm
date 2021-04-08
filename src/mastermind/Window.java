@@ -31,10 +31,10 @@ public class Window extends JFrame {
 
     // Probability options
     public static final int probabilityMutationPerChromosome = 10;
-    public static final int probabilityMutationPerGene = 20;
+    public static final int probabilityMutationPerGene = 5;
 
     // Number of the chromosomes and genes
-    public static final int NUM_CHROMOSOMES = 20;
+    public static final int NUM_CHROMOSOMES = 4;
     public static int NUM_GENES = 4;
 
     // Visibility options
@@ -115,7 +115,7 @@ public class Window extends JFrame {
         Window.bestChromosomeFitness.add(population.getBestChromosome().getValue());
         Window.averageFitness.add(population.getAverageFitness());
         //Loop to improve population
-        while (!population.stopCondition()) {
+        while (/*!population.stopCondition()*/ i<100) {
             population.totalFitness = 0;
             //Selection of the best chromosomes
             population.selection();
