@@ -74,7 +74,8 @@ public class Chromosome {
     }
 
     public void setGenes(int pos, Colors color) {
-        this.genes.get(pos).setColor(color);
+        this.genes.remove(pos);
+        this.genes.add(pos, new Gene(color));
     }
 
     public Response getResponse(){ return this.response; }

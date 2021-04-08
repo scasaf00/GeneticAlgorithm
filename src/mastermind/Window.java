@@ -23,7 +23,7 @@ public class Window extends JFrame {
     private static javax.swing.JLabel jLabel1;
     private static javax.swing.JPanel jPanel1;
 
-    public static final boolean DEV_OPS = true;
+    public static final boolean DEV_OPS = false;
 
     //##################################################################
     //Mutation Option
@@ -34,8 +34,8 @@ public class Window extends JFrame {
     public static final int probabilityMutationPerGene = 5;
 
     // Number of the chromosomes and genes
-    public static final int NUM_CHROMOSOMES = 4;
-    public static int NUM_GENES = 4;
+    public static final int NUM_CHROMOSOMES = 12;
+    public static int NUM_GENES = 2;
 
     // Visibility options
     private static final boolean SHOW_GRAPH = true;
@@ -115,7 +115,7 @@ public class Window extends JFrame {
         Window.bestChromosomeFitness.add(population.getBestChromosome().getValue());
         Window.averageFitness.add(population.getAverageFitness());
         //Loop to improve population
-        while (/*!population.stopCondition()*/ i<100) {
+        while (/*!population.stopCondition()*/ i<10) {
             population.totalFitness = 0;
             //Selection of the best chromosomes
             population.selection();
