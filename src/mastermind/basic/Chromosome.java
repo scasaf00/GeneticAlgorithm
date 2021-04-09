@@ -58,7 +58,7 @@ public class Chromosome {
     }
 
     public void setValue() {
-       this.value = this.response.getNumericalValue();
+        this.value = this.response.getNumericalValue();
     }
 
     public int getValue() {

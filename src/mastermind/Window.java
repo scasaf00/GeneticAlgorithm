@@ -6,14 +6,34 @@ import mastermind.utils.Colors;
 import mastermind.utils.Graph;
 
 import javax.swing.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 
 public class Window extends JFrame {
 
     public enum Mutations{
         PER_CHROMOSOME,
         PER_GEN
+    }
+
+    public static Properties prop = new Properties();
+    private static InputStream input;
+
+    static {
+        try {
+            input = new FileInputStream("config.properties");
+        } catch (FileNotFoundException ignored) {}
+    }
+
+    static {
+        try {
+            prop.load(input);
+        } catch (IOException ignored) {}
     }
 
     //Graph
@@ -25,26 +45,32 @@ public class Window extends JFrame {
 
     public static final boolean DEV_OPS = false;
 
-    //##################################################################
     //Mutation Option
-    public static final Mutations mutation = Mutations.PER_CHROMOSOME;
+    public static Mutations mutation;
+
+    static {
+        if(prop.getProperty("mutate").equals("gene"))
+            mutation = Mutations.PER_GEN;
+        else
+            mutation = Mutations.PER_CHROMOSOME;
+    }
 
     // Probability options
-    public static final int probabilityMutationPerChromosome = 10;
-    public static final int probabilityMutationPerGene = 5;
+    public static final int probabilityMutationPerChromosome = Integer.parseInt(prop.getProperty("probability_mutation_per_chromosome"));
+    public static final int probabilityMutationPerGene = Integer.parseInt(prop.getProperty("probability_mutation_per_gene"));
 
     // Number of the chromosomes and genes
-    public static final int NUM_CHROMOSOMES = 12;
-    public static int NUM_GENES = 2;
+    public static final int NUM_CHROMOSOMES = Integer.parseInt(prop.getProperty("num_chromosomes"));
+    public static int NUM_GENES = Integer.parseInt(prop.getProperty("num_genes"));
 
     // Visibility options
-    private static final boolean SHOW_GRAPH = true;
-    public static final int GRAPH_INTERVAL = 100;
-    public static final boolean SHOW_GENERATE = true;
-    public static final boolean SHOW_EVALUATE = true;
-    public static final boolean SHOW_SELECTED = true;
-    public static final boolean SHOW_CROSSOVER = true;
-    public static final boolean SHOW_MUTATE = true;
+    private static final boolean SHOW_GRAPH = Boolean.parseBoolean(prop.getProperty("show_graph"));
+    public static final int GRAPH_INTERVAL = Integer.parseInt(prop.getProperty("graph_interval"));
+    public static final boolean SHOW_GENERATE =  Boolean.parseBoolean(prop.getProperty("show_generate"));;
+    public static final boolean SHOW_EVALUATE =  Boolean.parseBoolean(prop.getProperty("show_evaluate"));;
+    public static final boolean SHOW_SELECTED =  Boolean.parseBoolean(prop.getProperty("show_selected"));;
+    public static final boolean SHOW_CROSSOVER =  Boolean.parseBoolean(prop.getProperty("show_crossover"));;
+    public static final boolean SHOW_MUTATE =  Boolean.parseBoolean(prop.getProperty("show_mutate"));;
     //##################################################################
 
     public Window() {

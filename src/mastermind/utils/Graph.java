@@ -14,6 +14,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -90,7 +91,9 @@ public class Graph extends ImageIcon {
                 java.util.logging.Logger.getLogger(mastermind.Window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
             /* Create and display the form */
-            java.awt.EventQueue.invokeLater(() -> new Window().setVisible(true));
+            java.awt.EventQueue.invokeLater(() -> {
+                new Window().setVisible(true);
+            });
         }
     }
 }
