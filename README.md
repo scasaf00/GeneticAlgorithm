@@ -10,10 +10,10 @@
 
 Este repositorio desarolla el juego Mastermind a traves de algoritmos geneticos.
 
--   Crossover por 1 punto
--   Mutacion por gen o por cromosoma
--   Tamaño de la poblacion y del cromosoma variable
--   Vision gráfica a traves de un grafico de lineasc
+-   Crossover por 1 punto.
+-   Mutacion por gen o por cromosoma.
+-   Tamaño de la poblacion y del cromosoma variable.
+-   Vision a traves de un gráfico de lineas.
 
 ## Tecnologías
 
@@ -21,7 +21,7 @@ Se ha utilizado Java con la libreria JFreeChart para la visualización gráfica 
 
 ## Manual de uso
 
-Todas las variables se modifican desde el fichero de propiedades <a href="config.properties">config.properties</>
+Todas las variables se modifican desde el fichero de propiedades <a href="config.properties">config.properties</a>
 
 ### Capturas
 
