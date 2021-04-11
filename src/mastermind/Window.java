@@ -140,7 +140,7 @@ public class Window extends JFrame {
         Window.bestChromosomeFitness.add(population.getBestChromosome().getValue());
         Window.averageFitness.add(population.getAverageFitness());
         //Loop to improve population
-        while (/*!population.stopCondition()*/ i<1) {
+        while (!population.stopCondition()) {
             population.totalFitness = 0;
             //Selection of the best chromosomes
             population.selection();

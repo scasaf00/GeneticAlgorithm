@@ -28,40 +28,41 @@ public class Population {
     }
 
     public void evaluate(List<Gene> genesCode){
-        Iterator<Chromosome> it = this.chromosomes.iterator();
-        int white = 0, black = 0;
-        while (it.hasNext()){
-            Chromosome c = it.next();
-            List<Gene> genesChromosome = c.getGenes();
+        for (Chromosome value : this.chromosomes) {
+            int white = 0, black = 0;
+            List<Gene> genesChromosome = value.getGenes();
 
-            for(int i = 0; i < Window.NUM_GENES; i++){
-                if (genesChromosome.get(i).getColor() == genesCode.get(i).getColor()){
-                    black++;
-                    genesCode.get(i).setEvaluated(true);
-                    genesChromosome.get(i).setEvaluated(true);
-                }
-            }
-            for(int i = 0; i < Window.NUM_GENES; i++) {
+            for(int i = 0; i < Window.NUM_GENES; i++)
+                genesCode.get(i).setEvaluated(false);
+
+            for (int i = 0; i < Window.NUM_GENES; i++) {
                 for (int j = 0; j < Window.NUM_GENES; j++) {
-                    if (genesCode.get(i).getColor() == genesChromosome.get(j).getColor() && !genesCode.get(i).getEvaluated() && !genesChromosome.get(j).getEvaluated()) {
-                        white++;
-                        genesCode.get(i).setEvaluated(true);
-                        genesChromosome.get(j).setEvaluated(true);
+                    if ((genesCode.get(j).getColor() == genesChromosome.get(i).getColor()) && (i == j) && !genesCode.get(j).getEvaluated() && !genesChromosome.get(i).getEvaluated()) {
+                        black++;
+                        genesCode.get(j).setEvaluated(true);
+                        genesChromosome.get(i).setEvaluated(true);
                     }
                 }
-                genesCode.get(i).setEvaluated(true);
             }
-            c.setResponse(white, black);
-            c.setValue();
-            totalFitness += c.getValue();
-            if(this.getBestChromosome() == null || c.getValue() > this.getBestChromosome().getValue()){
-                Chromosome chromosome = new Chromosome(c.getGenes());
-                chromosome.setResponse(c.getResponse().getWhite(), c.getResponse().getBlack());
+            for (int i = 0; i < Window.NUM_GENES; i++) {
+                for (int j = 0; j < Window.NUM_GENES; j++) {
+                    if ((genesCode.get(j).getColor() == genesChromosome.get(i).getColor()) && (i != j) && !genesCode.get(j).getEvaluated() && !genesChromosome.get(i).getEvaluated()) {
+                        white++;
+                        genesCode.get(j).setEvaluated(true);
+                        genesChromosome.get(i).setEvaluated(true);
+                    }
+                }
+            }
+
+            value.setResponse(white, black);
+            value.setValue();
+            totalFitness += value.getValue();
+            if (this.getBestChromosome() == null || value.getValue() > this.getBestChromosome().getValue()) {
+                Chromosome chromosome = new Chromosome(value.getGenes());
+                chromosome.setResponse(value.getResponse().getWhite(), value.getResponse().getBlack());
                 chromosome.setValue();
                 this.setBestChromosome(chromosome);
             }
-            white = 0;
-            black = 0;
         }
         if(Window.SHOW_EVALUATE){
             System.out.println("\nEvaluation with color code:");
@@ -121,11 +122,12 @@ public class Population {
             Chromosome c2 = this.chromosomes.get(i+1);
             back = new Chromosome(this.chromosomes.get(i+1).getGenes());
 
-            out.append("Chromosomes ").append(i).append(" & ").append(i+1).append(" before crossover:\t").append(c1.toString()).append(" , ").append(c2.toString()).append("\n");
+            int bP = (int) (Math.random() * (Window.NUM_GENES-1)+1);
+            out.append("Chromosomes ").append(i).append(" & ").append(i + 1).append(" before crossover at point ").append(bP).append(" :\t").append(c1.toString()).append(" , ").append(c2.toString()).append("\n");
 
-            cross(c1, c2, i, back);
+            cross(c1, c2, i, back, bP);
 
-            out.append("Chromosomes ").append(i).append(" & ").append(i+1).append(" after crossover:\t").append(c1.toString()).append(" , ").append(c2.toString()).append("\n");
+            out.append("Chromosomes ").append(i).append(" & ").append(i + 1).append(" after crossover at point ").append(bP).append(" :\t").append(c1.toString()).append(" , ").append(c2.toString()).append("\n");
             out.append("-------------------------------------------------------------------\n");
         }
 
@@ -133,9 +135,9 @@ public class Population {
             System.out.println(out);
     }
 
-    public void cross(Chromosome c1, Chromosome c2, int pos, Chromosome back){
+    private void cross(Chromosome c1, Chromosome c2, int pos, Chromosome back, int bP){
 
-        int bP = (int) (Math.random() * (Window.NUM_GENES-1)+1);
+
 
         for(int i = bP; i < Window.NUM_GENES; i++) {
             c2.replace(i, c1.getGenes().get(i));
