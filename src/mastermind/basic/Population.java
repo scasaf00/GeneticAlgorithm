@@ -5,9 +5,11 @@ import mastermind.utils.Colors;
 
 import java.util.*;
 
+import static java.util.Collections.replaceAll;
+
 public class Population {
 
-    private List<Chromosome> chromosomes = new LinkedList<>();
+    private List<Chromosome> chromosomes = new ArrayList<>();
     private Chromosome bestChromosome;
     private int generation = 0;
     public int totalFitness = 0;
@@ -20,7 +22,8 @@ public class Population {
             chromosomes.add(new Chromosome());
         }
         if(Window.SHOW_GENERATE){
-            new ThreadShowGenerate().run(this);
+            System.out.println("\nInitial Population:");
+            System.out.println(this.toString());
         }
     }
 
@@ -34,19 +37,19 @@ public class Population {
             for(int i = 0; i < Window.NUM_GENES; i++){
                 if (genesChromosome.get(i).getColor() == genesCode.get(i).getColor()){
                     black++;
-                    genesCode.get(i).eveluated = true;
-                    genesChromosome.get(i).eveluated = true;
+                    genesCode.get(i).setEvaluated(true);
+                    genesChromosome.get(i).setEvaluated(true);
                 }
             }
             for(int i = 0; i < Window.NUM_GENES; i++) {
                 for (int j = 0; j < Window.NUM_GENES; j++) {
-                    if (genesCode.get(i).getColor() == genesChromosome.get(j).getColor() && !genesCode.get(i).eveluated && !genesChromosome.get(j).eveluated) {
+                    if (genesCode.get(i).getColor() == genesChromosome.get(j).getColor() && !genesCode.get(i).getEvaluated() && !genesChromosome.get(j).getEvaluated()) {
                         white++;
-                        genesCode.get(i).eveluated = true;
-                        genesChromosome.get(j).eveluated = true;
+                        genesCode.get(i).setEvaluated(true);
+                        genesChromosome.get(j).setEvaluated(true);
                     }
                 }
-                genesCode.get(i).eveluated = true;
+                genesCode.get(i).setEvaluated(true);
             }
             c.setResponse(white, black);
             c.setValue();
@@ -61,12 +64,14 @@ public class Population {
             black = 0;
         }
         if(Window.SHOW_EVALUATE){
-           new ThreadShowEvaluate().run(this);
+            System.out.println("\nEvaluation with color code:");
+            System.out.println(" Chromosome\t\t   Reply\t\t Value");
+            System.out.println(this.toString());
         }
     }
 
     public boolean stopCondition(){
-        List<Gene> win = new LinkedList<>();
+        List<Gene> win = new ArrayList<>();
         for(int i = 0; i < Window.NUM_GENES; i++){
             win.add(new Gene(Colors.BLACK));
         }
@@ -82,7 +87,7 @@ public class Population {
 
     public void selection(){
         generation++;
-        List<Chromosome> newChromosomes = new LinkedList<>();
+        List<Chromosome> newChromosomes = new ArrayList<>();
         int totalFitness = 0;
         for (Chromosome chromosome : this.chromosomes) {
             totalFitness += chromosome.getValue();
@@ -100,43 +105,51 @@ public class Population {
         }
         this.chromosomes = newChromosomes;
         if(Window.SHOW_SELECTED) {
-            new ThreadShowSelect().run(this);
+            System.out.println("Generation: "+generation);
+            System.out.println(" Seleccion");
+            System.out.println(this.toString());
         }
     }
 
     public void crossover(){
+
         StringBuilder out = new StringBuilder();
-        List<Chromosome> oldChromosomes = this.chromosomes;
-        List<Chromosome> newChromosomes = new LinkedList<>();
-        for (int i = 0; i < Window.NUM_CHROMOSOMES; i += 2) {
-            if ((i + 1) == oldChromosomes.size())
-                break;
-            int breakPoint = (int) (Math.random()*(Window.NUM_GENES-1)+1);
-            out.append("Chromosomes ").append(i).append(" y ").append(i+1).append(" before crossover:\t").append(oldChromosomes.get(i).toString()).append(" , ").append(oldChromosomes.get(i + 1).toString()).append("\n");
+        Chromosome back;
 
-            Chromosome chromosome1 = new Chromosome(oldChromosomes.get(i+1).getGenes());
-            Chromosome chromosome2 = new Chromosome(oldChromosomes.get(i).getGenes());
-            for (int j = breakPoint; j < Window.NUM_GENES; j++) {
-                Colors color = oldChromosomes.get(i + 1).getGenes().get(j).getColor();
-                chromosome1.setGenes(j, oldChromosomes.get(i).getGenes().get(j).getColor());
-                chromosome2.setGenes(j, color);
-            }
-            newChromosomes.add(i, chromosome1);
-            newChromosomes.add(i+1, chromosome2);
+        for(int i = 0; i < Window.NUM_CHROMOSOMES; i += 2){
+            Chromosome c1 = this.chromosomes.get(i);
+            Chromosome c2 = this.chromosomes.get(i+1);
+            back = new Chromosome(this.chromosomes.get(i+1).getGenes());
 
-            out.append("Chromosomes ").append(i).append(" y ").append(i+1).append(" after crossover:\t").append(chromosome1).append(" , ").append(chromosome2).append("\n");
+            out.append("Chromosomes ").append(i).append(" & ").append(i+1).append(" before crossover:\t").append(c1.toString()).append(" , ").append(c2.toString()).append("\n");
+
+            cross(c1, c2, i, back);
+
+            out.append("Chromosomes ").append(i).append(" & ").append(i+1).append(" after crossover:\t").append(c1.toString()).append(" , ").append(c2.toString()).append("\n");
             out.append("-------------------------------------------------------------------\n");
         }
-        this.chromosomes.clear();
-        this.chromosomes.addAll(newChromosomes);
+
         if(Window.SHOW_CROSSOVER)
-           new ThreadShowCrossoverMutate().run(out);
+            System.out.println(out);
+    }
+
+    public void cross(Chromosome c1, Chromosome c2, int pos, Chromosome back){
+
+        int bP = (int) (Math.random() * (Window.NUM_GENES-1)+1);
+
+        for(int i = bP; i < Window.NUM_GENES; i++) {
+            c2.replace(i, c1.getGenes().get(i));
+            c1.replace(i, back.getGenes().get(i));
+        }
+
+        replaceAll(this.chromosomes, this.chromosomes.get(pos), c1);
+        replaceAll(this.chromosomes, this.chromosomes.get(pos+1), c2);
     }
 
     public void mutate(){
         StringBuilder out = new StringBuilder();
         List<Chromosome> oldChromosomes = this.chromosomes;
-        List<Chromosome> newChromosomes = new LinkedList<>();
+        List<Chromosome> newChromosomes = new ArrayList<>();
         if(Window.mutation == Window.Mutations.PER_CHROMOSOME){
             for(int i = 0; i < Window.NUM_CHROMOSOMES; i++){
                 if((int) (Math.random() * 99) < Window.probabilityMutationPerChromosome) {
@@ -151,8 +164,6 @@ public class Population {
                     newChromosomes.add(i, new Chromosome(oldChromosomes.get(i).getGenes()));
                 }
             }
-            System.out.println(oldChromosomes);
-            System.out.println(newChromosomes);
         }else{
             for(int i = 0; i < Window.NUM_CHROMOSOMES; i++){
                 for(int j = 0; j < Window.NUM_GENES; j++){
@@ -168,7 +179,7 @@ public class Population {
         this.chromosomes.clear();
         this.chromosomes.addAll(newChromosomes);
         if(Window.SHOW_MUTATE)
-           new ThreadShowCrossoverMutate().run(out);
+            System.out.println(out.toString());
     }
 
     private Colors getRandomColor(Colors color){
@@ -216,58 +227,21 @@ public class Population {
         return this.totalFitness/Window.NUM_CHROMOSOMES;
     }
 
+    public void setChromosomes(List<Chromosome> chromosomes) { this.chromosomes = chromosomes; }
+
+    public List<Chromosome> getChromosomes(){ return this.chromosomes;}
+
     @Override
     public String toString() {
-        return new ThreadToString().call();
-    }
-
-    private class ThreadToString extends Thread{
-        public ThreadToString(){ super(); }
-        public String call(){
-            StringBuilder out = new StringBuilder();
-            for (Chromosome chromosome : chromosomes) {
-                out.append(chromosome.toString()).append("\n");
-            }
-            if(bestChromosome!=null) {
-                out.append("\n\t\tBest Chromosome:\n");
-                out.append(bestChromosome.toString()).append("\n");
-            }
-            return out.toString();
+        StringBuilder out = new StringBuilder();
+        for (Chromosome chromosome : chromosomes) {
+            out.append(chromosome.toString()).append("\n");
         }
-    }
-
-    private static class ThreadShowGenerate extends Thread{
-        public ThreadShowGenerate(){ super ();}
-        public void run(Object o){
-            System.out.println("\nInitial Population:");
-            System.out.println(o.toString());
+        if(bestChromosome!=null) {
+            out.append("\n\t\tBest Chromosome:\n");
+            out.append(bestChromosome.toString()).append("\n");
         }
+        return out.toString();
     }
-
-    private static class ThreadShowEvaluate extends Thread{
-        public ThreadShowEvaluate(){ super ();}
-        public void run(Object o){
-            System.out.println("\nEvaluation with color code:");
-            System.out.println(" Chromosome\t\t   Reply\t\t Value");
-            System.out.println(o.toString());
-        }
-    }
-
-    private class ThreadShowSelect extends Thread{
-        public ThreadShowSelect(){ super ();}
-        public void run(Object o){
-            System.out.println("Generation: "+generation);
-            System.out.println(" Seleccion");
-            System.out.println(o.toString());
-        }
-    }
-
-    private static class ThreadShowCrossoverMutate extends Thread{
-        public ThreadShowCrossoverMutate(){ super ();}
-        public void run(Object o){
-            System.out.println(o.toString());
-        }
-    }
-
 }
 

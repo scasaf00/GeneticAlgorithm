@@ -2,11 +2,12 @@ package mastermind.basic;
 
 import mastermind.Window;
 import mastermind.utils.Colors;
-import java.util.LinkedList;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Response {
-    private final List<Gene> reply = new LinkedList<>();
+    private final List<Gene> reply = new ArrayList<>();
     private int numericalValue;
     private final int white;
     private final int black;

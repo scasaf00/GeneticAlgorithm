@@ -10,7 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -37,9 +37,9 @@ public class Window extends JFrame {
     }
 
     //Graph
-    private static final List<Integer> fitness = new LinkedList<>();
-    private static final List<Integer> bestChromosomeFitness = new LinkedList<>();
-    private static final List<Integer> averageFitness = new LinkedList<>();
+    private static final List<Integer> fitness = new ArrayList<>();
+    private static final List<Integer> bestChromosomeFitness = new ArrayList<>();
+    private static final List<Integer> averageFitness = new ArrayList<>();
     private static javax.swing.JLabel jLabel1;
     private static javax.swing.JPanel jPanel1;
 
@@ -71,7 +71,6 @@ public class Window extends JFrame {
     public static final boolean SHOW_SELECTED =  Boolean.parseBoolean(prop.getProperty("show_selected"));;
     public static final boolean SHOW_CROSSOVER =  Boolean.parseBoolean(prop.getProperty("show_crossover"));;
     public static final boolean SHOW_MUTATE =  Boolean.parseBoolean(prop.getProperty("show_mutate"));;
-    //##################################################################
 
     public Window() {
         // Graph view
@@ -141,7 +140,7 @@ public class Window extends JFrame {
         Window.bestChromosomeFitness.add(population.getBestChromosome().getValue());
         Window.averageFitness.add(population.getAverageFitness());
         //Loop to improve population
-        while (/*!population.stopCondition()*/ i<10) {
+        while (/*!population.stopCondition()*/ i<1) {
             population.totalFitness = 0;
             //Selection of the best chromosomes
             population.selection();

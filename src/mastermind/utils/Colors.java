@@ -10,7 +10,7 @@ public enum Colors {
     WHITE("\033[37m"),  // -> 7/7
     EMPTY("\u001B[0m"); // only for the reply initialization
 
-    private String value;
+    private final String value;
 
     Colors(String value){
         this.value = value;

@@ -3,7 +3,6 @@
   <img src="https://forthebadge.com/images/badges/works-on-my-machine.svg" alt="forthebadge" />
 </p>
 
-
 <p align=center>
   <img width="200" height="200" src="rsc/ico.png"  alt="icono mastermind">
 </p>
@@ -17,7 +16,7 @@ Este repositorio desarolla el juego Mastermind a traves de algoritmos geneticos.
 
 ## Tecnologías
 
-Se ha utilizado Java con la libreria JFreeChart para la visualización gráfica de la evolución.
+Se ha utilizado Java con las <a href="/lib">librerias</a> JFreeChart y JCommon para la visualización gráfica de la evolución.
 
 ## Manual de uso
 
