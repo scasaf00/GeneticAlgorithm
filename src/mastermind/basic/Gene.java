@@ -20,7 +20,7 @@ public class Gene {
         this.color = color;
     }
 
-    public boolean getEvaluated(){return this.evaluated;}
+    public boolean getEvaluated(){return !this.evaluated;}
 
     public void setEvaluated(boolean evaluated){ this.evaluated = evaluated;}
 

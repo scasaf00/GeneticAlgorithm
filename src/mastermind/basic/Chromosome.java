@@ -10,7 +10,7 @@ import static java.util.Collections.replaceAll;
 
 public class Chromosome {
 
-    private List<Gene> genes = null;
+    private final List<Gene> genes;
     private Response response;
     private int value;
 
@@ -18,36 +18,6 @@ public class Chromosome {
     public Chromosome(){
         List<Gene> l = new ArrayList<>();
         for(int i = 0; i < Window.NUM_GENES; i++){
-            switch ((int) (Math.random()*7+1)){
-                case 1:
-                    l.add(new Gene(Colors.RED));
-                    break;
-                case 2:
-                    l.add(new Gene(Colors.YELLOW));
-                    break;
-                case 3:
-                    l.add(new Gene(Colors.BLUE));
-                    break;
-                case 4:
-                    l.add(new Gene(Colors.GREEN));
-                    break;
-                case 5:
-                    l.add(new Gene(Colors.PURPLE));
-                    break;
-                case 6:
-                    l.add(new Gene(Colors.BLACK));
-                    break;
-                case 7:
-                    l.add(new Gene(Colors.WHITE));
-                    break;
-            }
-        }
-        this.genes = l;
-    }
-
-    public Chromosome(int gen){
-        List<Gene> l = new ArrayList<>();
-        for(int i = 0; i < gen; i++){
             switch ((int) (Math.random()*7+1)){
                 case 1:
                     l.add(new Gene(Colors.RED));
@@ -92,6 +62,7 @@ public class Chromosome {
         this.genes = l;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void replace(int pos, Gene gene){
         replaceAll(genes, genes.get(pos), gene);
     }

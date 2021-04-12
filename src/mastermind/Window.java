@@ -66,11 +66,11 @@ public class Window extends JFrame {
     // Visibility options
     private static final boolean SHOW_GRAPH = Boolean.parseBoolean(prop.getProperty("show_graph"));
     public static final int GRAPH_INTERVAL = Integer.parseInt(prop.getProperty("graph_interval"));
-    public static final boolean SHOW_GENERATE =  Boolean.parseBoolean(prop.getProperty("show_generate"));;
-    public static final boolean SHOW_EVALUATE =  Boolean.parseBoolean(prop.getProperty("show_evaluate"));;
-    public static final boolean SHOW_SELECTED =  Boolean.parseBoolean(prop.getProperty("show_selected"));;
-    public static final boolean SHOW_CROSSOVER =  Boolean.parseBoolean(prop.getProperty("show_crossover"));;
-    public static final boolean SHOW_MUTATE =  Boolean.parseBoolean(prop.getProperty("show_mutate"));;
+    public static final boolean SHOW_GENERATE =  Boolean.parseBoolean(prop.getProperty("show_generate"));
+    public static final boolean SHOW_EVALUATE =  Boolean.parseBoolean(prop.getProperty("show_evaluate"));
+    public static final boolean SHOW_SELECTED =  Boolean.parseBoolean(prop.getProperty("show_selected"));
+    public static final boolean SHOW_CROSSOVER =  Boolean.parseBoolean(prop.getProperty("show_crossover"));
+    public static final boolean SHOW_MUTATE =  Boolean.parseBoolean(prop.getProperty("show_mutate"));
 
     public Window() {
         // Graph view

@@ -22,13 +22,4 @@ Se ha utilizado Java con las <a href="/lib">librerias</a> JFreeChart y JCommon p
 
 Todas las variables se modifican desde el fichero de propiedades <a href="config.properties">config.properties</a>
 
-### Capturas
-
-<p align="center">
-  <img  src="git/example.png">
-  <img  src="git/exampleAdmin.png">
-  <img  src="git/exampleAgri.png">
-  <img  src="git/exampleGan.png">
-</p>
-
 [![licensebuttons by-nc-sa](https://licensebuttons.net/l/by-nc-sa/3.0/88x31.png)](https://creativecommons.org/licenses/by-nc-sa/4.0)
