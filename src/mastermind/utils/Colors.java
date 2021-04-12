@@ -7,7 +7,7 @@ public enum Colors {
     GREEN("\033[32m"),  // -> 4/7
     PURPLE("\033[35m"), // -> 5/7
     BLACK("\033[30m"),  // -> 6/7
-    WHITE("\033[37m"),  // -> 7/7
+    WHITE("\u001B[0m"),  // -> 7/7
     EMPTY("\u001B[0m"); // only for the reply initialization
 
     private final String value;
