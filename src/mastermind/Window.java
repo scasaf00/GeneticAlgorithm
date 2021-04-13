@@ -15,13 +15,21 @@ import java.util.List;
 import java.util.Properties;
 
 public class Window extends JFrame {
-
+    /**
+     * Enum with the mutate options
+     */
     public enum Mutations{
         PER_CHROMOSOME,
         PER_GEN
     }
 
+    /**
+     * Properties object
+     */
     public static Properties prop = new Properties();
+    /**
+     * Input to load the properties
+     */
     private static InputStream input;
 
     static {
@@ -36,16 +44,36 @@ public class Window extends JFrame {
         } catch (IOException ignored) {}
     }
 
-    //Graph
+    /**
+     * GRAPH
+     *
+     * List of the total amount of fitness in all generations
+     */
     private static final List<Integer> fitness = new ArrayList<>();
+    /**
+     * List of the best chromosome's fitness in all generations
+     */
     private static final List<Integer> bestChromosomeFitness = new ArrayList<>();
+    /**
+     * List of the average fitness in all generations
+     */
     private static final List<Integer> averageFitness = new ArrayList<>();
+    /**
+     * Labels for the graph
+     */
     private static javax.swing.JLabel jLabel1;
     private static javax.swing.JPanel jPanel1;
 
+    /**
+     * Development option choose (Don't go in release)
+     */
     public static final boolean DEV_OPS = false;
 
-    //Mutation Option
+    /**
+     * MUTATION
+     *
+     * Mutation option loaded from properties
+     */
     public static Mutations mutation;
 
     static {
@@ -55,23 +83,62 @@ public class Window extends JFrame {
             mutation = Mutations.PER_CHROMOSOME;
     }
 
-    // Probability options
+    /**
+     * PROBABILITY
+     *
+     * Probability for the mutation option: PER_CHROMOSOME loaded from properties
+     */
     public static final int probabilityMutationPerChromosome = Integer.parseInt(prop.getProperty("probability_mutation_per_chromosome"));
+    /**
+     * Probability for the mutation option: PER_GEN loaded from properties
+     */
     public static final int probabilityMutationPerGene = Integer.parseInt(prop.getProperty("probability_mutation_per_gene"));
 
-    // Number of the chromosomes and genes
+    /**
+     * SIZE
+     *
+     * Size of chromosomes list loaded from properties
+     */
     public static final int NUM_CHROMOSOMES = Integer.parseInt(prop.getProperty("num_chromosomes"));
+    /**
+     * Size of chromosome's genes loaded from properties
+     */
     public static int NUM_GENES = Integer.parseInt(prop.getProperty("num_genes"));
 
-    // Visibility options
+    /**
+     * SHOW
+     *
+     * Graph view option loaded from properties
+     */
     private static final boolean SHOW_GRAPH = Boolean.parseBoolean(prop.getProperty("show_graph"));
+    /**
+     * Graph interval option loaded from properties
+     */
     public static final int GRAPH_INTERVAL = Integer.parseInt(prop.getProperty("graph_interval"));
+    /**
+     * Generate view option loaded from properties
+     */
     public static final boolean SHOW_GENERATE =  Boolean.parseBoolean(prop.getProperty("show_generate"));
+    /**
+     * Evaluate view option loaded from properties
+     */
     public static final boolean SHOW_EVALUATE =  Boolean.parseBoolean(prop.getProperty("show_evaluate"));
+    /**
+     * Select view option loaded from properties
+     */
     public static final boolean SHOW_SELECTED =  Boolean.parseBoolean(prop.getProperty("show_selected"));
+    /**
+     * Crossover view option loaded from properties
+     */
     public static final boolean SHOW_CROSSOVER =  Boolean.parseBoolean(prop.getProperty("show_crossover"));
+    /**
+     * Mutation view option loaded from properties
+     */
     public static final boolean SHOW_MUTATE =  Boolean.parseBoolean(prop.getProperty("show_mutate"));
 
+    /**
+     * Constructor
+     */
     public Window() {
         // Graph view
         initComponents();
@@ -82,6 +149,9 @@ public class Window extends JFrame {
         jLabel1.setText("");
     }
 
+    /**
+     * Initialize the components for the graph
+     */
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
@@ -120,12 +190,11 @@ public class Window extends JFrame {
         else
             codeToGuess = new Chromosome();
 
-
         Population population = new Population();
 
         System.out.println("\tWELCOME TO MASTERMIND GAME\n");
         System.out.println("A code has been generated randomly:");
-        System.out.println(codeToGuess.toString());
+        System.out.println(codeToGuess);
 
         /*
          *  Start of the genetic algorithm
@@ -167,10 +236,10 @@ public class Window extends JFrame {
         System.out.println("Best Chromosome:\n"+bestChromosome);
 
         System.out.println("Code: ");
-        System.out.println(codeToGuess.toString());
+        System.out.println(codeToGuess);
 
         if(SHOW_GRAPH) {
-            new Graph.ThreadGrpah().start();
+            new Graph.ThreadGraph().start();
         }
     }
 }

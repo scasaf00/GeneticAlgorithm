@@ -18,7 +18,13 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Graph extends ImageIcon {
-
+    /**
+     * Constructor
+     * @param d - Dimension of the window
+     * @param fitness - List of the total amount of fitness in all generations
+     * @param bestChromosomeFitness - List of the best chromosome's fitness in all generations
+     * @param averageFitness - List of the average fitness in all generations
+     */
     public Graph(Dimension d, List<Integer> fitness, List<Integer> bestChromosomeFitness, List<Integer> averageFitness){
         XYDataset dataset = xyDataset(fitness, bestChromosomeFitness, averageFitness);
 
@@ -45,6 +51,13 @@ public class Graph extends ImageIcon {
         
     }
 
+    /**
+     * Creation of the Dataset in 2 dimensions (x, y) to create the graph
+     * @param fitness - List of the total amount of fitness in all generations
+     * @param bestChromosomeFitness - List of the best chromosome's fitness in all generations
+     * @param averageFitness - List of the average fitness in all generations
+     * @return xySeriesCollection
+     */
     private XYDataset xyDataset(List<Integer> fitness, List<Integer> bestChromosomeFitness, List<Integer> averageFitness) {
         XYSeries generations = new XYSeries("Total Fitness");
         XYSeries chromosomes = new XYSeries("Best Chromosome Fitness");
@@ -62,20 +75,28 @@ public class Graph extends ImageIcon {
         return xySeriesCollection;
     }
 
-    private void addAxis(List<Integer> axis, XYSeries serie) {
+    /**
+     * Creation of the graph line
+     * @param axis - Data to include in the series
+     * @param series - Series to include the axis
+     */
+    private void addAxis(List<Integer> axis, XYSeries series) {
         Iterator<Integer> it = axis.iterator();
         int total = axis.size();
         int i = 0;
         while (it.hasNext()){
             int in = it.next();
-            if(i%Window.GRAPH_INTERVAL==0) serie.add(i, in);
-            if(i+1 == total) serie.add(i, in);
+            if(i%Window.GRAPH_INTERVAL==0) series.add(i, in);
+            if(i+1 == total) series.add(i, in);
             i++;
         }
     }
 
-    public static class ThreadGrpah extends Thread{
-        public ThreadGrpah(){
+    /**
+     * Local class to show the graph in a different Thread
+     */
+    public static class ThreadGraph extends Thread{
+        public ThreadGraph(){
             super();
         }
         public void run(){
