@@ -6,6 +6,11 @@ import mastermind.utils.Colors;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Sergio Casado Fernandez
+ * @version 1.0v
+ */
+
 public class Response {
     /**
      * List of genes of the reply (Chromosome)

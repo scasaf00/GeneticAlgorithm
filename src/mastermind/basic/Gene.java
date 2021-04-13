@@ -2,6 +2,11 @@ package mastermind.basic;
 
 import mastermind.utils.Colors;
 
+/**
+ * @author Sergio Casado Fernandez
+ * @version 1.0v
+ */
+
 public class Gene {
 
     /**

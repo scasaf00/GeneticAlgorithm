@@ -1,5 +1,10 @@
 package mastermind.utils;
 
+/**
+ * @author Sergio Casado Fernandez
+ * @version 1.0v
+ */
+
 public enum Colors {
     RED("\033[31m"),    // -> 1/7
     YELLOW("\033[33m"), // -> 2/7

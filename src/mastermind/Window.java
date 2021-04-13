@@ -14,6 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * @author Sergio Casado Fernandez
+ * @version 1.0v
+ */
+
 public class Window extends JFrame {
     /**
      * Enum with the mutate options

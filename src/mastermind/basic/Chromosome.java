@@ -8,13 +8,18 @@ import java.util.List;
 
 import static java.util.Collections.replaceAll;
 
+/**
+ * @author Sergio Casado Fernandez
+ * @version 1.0v
+ */
+
 public class Chromosome {
     /**
      * List with the genes of the chromosome
      */
     private final List<Gene> genes;
     /**
-     * Special type of Gene to indicate value of the chromosome (Visual value: nº white & black)
+     * Special type of Gene to indicate value of the chromosome (Visual value: number white and black)
      */
     private Response response;
     /**

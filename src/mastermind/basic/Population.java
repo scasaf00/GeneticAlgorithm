@@ -7,6 +7,11 @@ import java.util.*;
 
 import static java.util.Collections.replaceAll;
 
+/**
+ * @author Sergio Casado Fernandez
+ * @version 1.0v
+ */
+
 public class Population {
     /**
      * List of the population's chromosomes
