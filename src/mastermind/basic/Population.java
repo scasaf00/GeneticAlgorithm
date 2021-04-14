@@ -3,7 +3,9 @@ package mastermind.basic;
 import mastermind.Window;
 import mastermind.utils.Colors;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import static java.util.Collections.replaceAll;
 
