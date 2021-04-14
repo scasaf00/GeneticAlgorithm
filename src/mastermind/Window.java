@@ -214,7 +214,7 @@ public class Window extends JFrame {
         Window.bestChromosomeFitness.add(population.getBestChromosome().getValue());
         Window.averageFitness.add(population.getAverageFitness());
         //Loop to improve population
-        while (!population.stopCondition() && i < 2000) {
+        while (!population.stopCondition() && i < (Integer.parseInt(prop.getProperty("num_genes"))*500)) {
             population.totalFitness = 0;
             //Selection of the best chromosomes
             population.selection();
@@ -235,7 +235,7 @@ public class Window extends JFrame {
          *  End of the genetic algorithm
          */
 
-        if(i == 2000)
+        if(i == (Integer.parseInt(prop.getProperty("num_genes"))*500))
             System.out.println("Bad luck, code has not been got it right");
 
         System.out.println("Generation: " + i);
