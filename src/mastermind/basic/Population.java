@@ -143,7 +143,7 @@ public class Population {
         if(Window.SHOW_SELECTED) {
             System.out.println("Generation: "+generation);
             System.out.println(" Seleccion");
-            System.out.println(this.toString());
+            System.out.println(this);
         }
     }
 
@@ -218,14 +218,16 @@ public class Population {
         }else{
             /* Mutation by gene */
             for(int i = 0; i < Window.NUM_CHROMOSOMES; i++){
+                Chromosome chromosome = new Chromosome(oldChromosomes.get(i).getGenes());
                 for(int j = 0; j < Window.NUM_GENES; j++){
                     if(Math.random()*99 < Window.probabilityMutationPerGene) {
                         out.append("Chromosome\t").append(i+1).append("\tbefore\tGene\t").append(j+1).append("\tmutated:\t").append(this.chromosomes.get(i).toString()).append("\n");
-                        this.chromosomes.get(i).setGenes(j, getRandomColor(this.chromosomes.get(i).getGenes().get(j).getColor()));
+                        chromosome.setGenes(j, getRandomColor(chromosome.getGenes().get(j).getColor()));
                         out.append("Chromosome\t").append(i+1).append("\tbefore\tGene\t").append(j+1).append("\tmutated:\t").append(this.chromosomes.get(i).toString()).append("\n");
                         out.append("------------------------------------------------------------------------------\n");
                     }
                 }
+                newChromosomes.add(i, chromosome);
             }
         }
         this.chromosomes.clear();

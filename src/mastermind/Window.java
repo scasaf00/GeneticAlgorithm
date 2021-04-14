@@ -72,7 +72,7 @@ public class Window extends JFrame {
     /**
      * Development option choose (Don't go in release)
      */
-    public static final boolean DEV_OPS = false;
+    public static final boolean DEV_OPS = true;
 
     /**
      * MUTATION
@@ -189,7 +189,7 @@ public class Window extends JFrame {
         Chromosome codeToGuess;
 
         if(DEV_OPS) {
-            codeToGuess = new Chromosome(Colors.RED, Colors.RED, Colors.YELLOW, Colors.RED);
+            codeToGuess = new Chromosome(Colors.YELLOW, Colors.BLUE, Colors.RED, Colors.YELLOW);
             NUM_GENES = 4;
         }
         else
